@@ -29,7 +29,7 @@ const consumer =  async () => {
         const data = JSON.parse(msg.content.toString());
 
         if(data.action == 'POST_post') {
-          const response = await axios.post(`${process.env.API}/posts`, {
+          const response = await axios.post(`${process.env.API}/posts/${data.id}`, {
             title: data.body.title,
             body: data.body.body,
             userId: 1
@@ -45,6 +45,49 @@ const consumer =  async () => {
               externalId: response.data.id
             });
           }
+        }
+
+        if(data.action == 'PUT_post') {
+          const response = await axios.put(`${process.env.API}/posts/${data.id}`, {
+            title: data.body.title,
+            body: data.body.body,
+            userId: 1
+          });
+
+          console.log(response.data);
+          if(response.data) {
+            //save to local db
+            await Post.update(
+            {
+              title: response.data.title,
+              body: response.data.body,
+              userId: response.data.userId
+            },
+            {
+              where: {
+                externalId: response.data.id
+              }
+            });
+          }
+        }
+
+        if(data.action == 'DELETE_post') {
+          const response = await axios.post(`${process.env.API}/posts`, {
+            title: data.body.title,
+            body: data.body.body,
+            userId: 1
+          });
+
+          console.log(response.data);
+          if(response.data) {
+            //save to local db
+            await Post.delete({
+              where: {
+                externalId: response.data.id
+              }
+            });
+          }
+
         }
 
         // if(data.action == 'PUT_post') {
