@@ -29,7 +29,7 @@ const consumer =  async () => {
         const data = JSON.parse(msg.content.toString());
 
         if(data.action == 'POST_post') {
-          const response = await axios.post(`${process.env.API}/posts/${data.id}`, {
+          const response = await axios.post(`${process.env.API}/posts`, {
             title: data.body.title,
             body: data.body.body,
             userId: 1
@@ -72,7 +72,7 @@ const consumer =  async () => {
         }
 
         if(data.action == 'DELETE_post') {
-          const response = await axios.post(`${process.env.API}/posts`, {
+          const response = await axios.post(`${process.env.API}/posts/${data.id}`, {
             title: data.body.title,
             body: data.body.body,
             userId: 1
